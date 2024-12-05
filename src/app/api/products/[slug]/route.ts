@@ -1,13 +1,13 @@
 import { z } from 'zod'
 import data from '../data.json'
 
-export async function GET(
-  _: Request,
-  { params }: { params: { slug: string } },
-) {
-  await new Promise((resolve) => setTimeout(resolve, 1000))
+interface ProductProps {
+  params: Promise<{ slug: string }>
+}
 
-  const slug = z.string().parse(params.slug)
+export async function GET(_: Request, { params }: ProductProps) {
+  const { slug: alias } = await params
+  const slug = z.string().parse(alias)
 
   const product = data.products.find((product) => product.slug === slug)
 
